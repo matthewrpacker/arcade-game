@@ -3,6 +3,7 @@ var Enemy = function() {
   if(previousYs.length === 3) { previousYs.splice(0,1) }
   this.sprite = 'images/turtle-12.png';
   this.x = generateRandomX()
+  this.startX = this.x
   this.y = generateRandomY()
   verifyUniqueY.call(this);
   previousYs.push(this.y)
@@ -20,7 +21,17 @@ function verifyUniqueY() {
 
 Enemy.prototype.update = function(dt) {
   this.x = this.x + (dt * 140);
+  shouldResetPosition();
 };
+
+function shouldResetPosition() {
+  allEnemies.forEach(function(enemy) {
+    if(enemy.x > 620 - enemy.startX) {
+      allEnemies.splice(enemy, 1)
+      allEnemies.push(new Enemy())
+    }
+  });
+}
 
 Enemy.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
