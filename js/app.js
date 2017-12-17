@@ -25,13 +25,26 @@ Player.prototype.render = function() {
 }
 
 Player.prototype.handleInput = function(key) {
+  switch (key) {
+    case 'left':
+      this.x = this.x - 10;
+      break;
+    case 'up':
+      this.y = this.y - 10;
+      break;
+    case 'right':
+      this.x = this.x + 10;
+      break;
+    case 'down':
+      this.y = this.y + 10;
+      break;
+  }
 }
 
 let allEnemies = [new Enemy()];
 let player = new Player();
 
-// Sends the keys to your Player.handleInput() method. Don't modify this.
-document.addEventListener('keyup', function(e) {
+document.addEventListener('keydown', function(e) {
   var allowedKeys = {
     37: 'left',
     38: 'up',
