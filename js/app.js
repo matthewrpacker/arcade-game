@@ -1,12 +1,22 @@
+let previousYs = []
 var Enemy = function() {
+  if(previousYs.length === 3) { previousYs.splice(0,1) }
   this.sprite = 'images/turtle-12.png';
   this.x = generateRandomX()
   this.y = generateRandomY()
+  verifyUniqueY.call(this);
+  previousYs.push(this.y)
 };
 
 let generateRandomX = () => Math.random() * (-125 + 500) - 500 // generate random x between -500 and -125
-let randomIndex = Math.trunc(3*Math.random())
-let generateRandomY = () => [133, 216, 300][randomIndex]
+let generateRandomY = () => [133, 216, 300][Math.trunc(3*Math.random())]
+
+function verifyUniqueY() {
+  if(previousYs.includes(this.y)) {
+    this.y = generateRandomY()
+    verifyUniqueY.call(this)
+  }
+}
 
 Enemy.prototype.update = function(dt) {
   this.x = this.x + (dt * 140);
