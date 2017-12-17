@@ -1,5 +1,7 @@
 var Enemy = function() {
   this.sprite = 'images/enemy-bug.png';
+  this.x = 100
+  this.y = 100
 };
 
 Enemy.prototype.update = function(dt) {
@@ -9,10 +11,24 @@ Enemy.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Write player class with update(), render() and handleInput() methods
-// Instantiate objects
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
+let Player = function() {
+  this.sprite = 'images/char-boy.png';
+  this.x = 202
+  this.y = 400
+};
+
+Player.prototype.update = function(dt) {
+}
+
+Player.prototype.render = function() {
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+}
+
+Player.prototype.handleInput = function(key) {
+}
+
+let allEnemies = [new Enemy()];
+let player = new Player();
 
 // Sends the keys to your Player.handleInput() method. Don't modify this.
 document.addEventListener('keyup', function(e) {
