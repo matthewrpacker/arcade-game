@@ -5,6 +5,7 @@ var Enemy = function() {
 };
 
 Enemy.prototype.update = function(dt) {
+  this.x = this.x + (dt * 140);
 };
 
 Enemy.prototype.render = function() {
