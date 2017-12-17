@@ -1,5 +1,5 @@
 let previousYs = []
-var Enemy = function() {
+let Enemy = function() {
   if(previousYs.length === 3) { previousYs.splice(0,1) }
   this.sprite = 'images/turtle-12.png';
   this.x = generateRandomX()
@@ -71,7 +71,7 @@ let allEnemies = [new Enemy(), new Enemy(), new Enemy()];
 let player = new Player();
 
 document.addEventListener('keydown', function(e) {
-  var allowedKeys = {
+  let allowedKeys = {
     37: 'left',
     38: 'up',
     39: 'right',
