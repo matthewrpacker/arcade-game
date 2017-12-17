@@ -1,5 +1,5 @@
 var Enemy = function() {
-  this.sprite = 'images/enemy-bug.png';
+  this.sprite = 'images/turtle-12.png';
   this.x = 100
   this.y = 100
 };
