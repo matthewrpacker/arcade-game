@@ -1,8 +1,12 @@
 var Enemy = function() {
   this.sprite = 'images/turtle-12.png';
-  this.x = 100
-  this.y = 100
+  this.x = generateRandomX()
+  this.y = generateRandomY()
 };
+
+let generateRandomX = () => Math.random() * (-125 + 500) - 500 // generate random x between -500 and -125
+let randomIndex = Math.trunc(3*Math.random())
+let generateRandomY = () => [133, 216, 300][randomIndex]
 
 Enemy.prototype.update = function(dt) {
   this.x = this.x + (dt * 140);
@@ -42,7 +46,7 @@ Player.prototype.handleInput = function(key) {
   }
 }
 
-let allEnemies = [new Enemy()];
+let allEnemies = [new Enemy(), new Enemy(), new Enemy()];
 let player = new Player();
 
 document.addEventListener('keydown', function(e) {
