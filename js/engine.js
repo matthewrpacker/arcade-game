@@ -91,6 +91,7 @@ let Engine = (function(global) {
      */
     function updateEntities(dt) {
         allEnemies.forEach(function(enemy) {
+            enemy.shouldResetPosition();
             enemy.update(dt);
         });
         player.update();
