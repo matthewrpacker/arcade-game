@@ -80,6 +80,7 @@ let Engine = (function(global) {
   function update(dt) {
     updateEntities(dt);
     checkCollisions();
+    checkForWin();
   }
 
   /* This is called by the update function and loops through all of the
@@ -142,11 +143,12 @@ let Engine = (function(global) {
         playerBottomCollision(enemy) ||
         playerLeftCollision(enemy)
       ) {
-        player.reset();
-        enemy.reset();
+        reset()
       }
     })
   }
+
+  function checkForWin() { if(player.y < 0) reset(); }
 
   /* This function initially draws the "game level", it will then call
    * the renderEntities function. Remember, this function is called every
@@ -211,7 +213,8 @@ let Engine = (function(global) {
    * those sorts of things. It's only called once by the init() method.
    */
   function reset() {
-    // noop
+    player.reset();
+    allEnemies.forEach((enemy) => { enemy.reset(); })
   }
 
   /* Go ahead and load all of the images we know we're going to need to
