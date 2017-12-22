@@ -79,7 +79,7 @@ let Engine = (function(global) {
    */
   function update(dt) {
     updateEntities(dt);
-    // checkCollisions();
+    checkCollisions();
   }
 
   /* This is called by the update function and loops through all of the
@@ -89,12 +89,63 @@ let Engine = (function(global) {
    * the data/properties related to the object. Do your drawing in your
    * render methods.
    */
+
   function updateEntities(dt) {
     allEnemies.forEach(function(enemy) {
       enemy.shouldResetPosition();
       enemy.update(dt);
     });
     player.update();
+  }
+
+  let playerTopCollision = function(enemy) {
+    if(player.x + 75 > enemy.x &&
+      player.x < enemy.x + 9 &&
+      player.y < enemy.y + 12 &&
+      player.y > enemy.y) {
+      return true
+    }
+  }
+
+  let playerRightCollision = function(enemy) {
+    if(player.x + 85 > enemy.x &&
+      player.x + 73 < enemy.x + 134 &&
+      player.y < enemy.y - 25 &&
+      player.y >= enemy.y - 64) {
+      return true
+    }
+  }
+
+  let playerBottomCollision = function(enemy) {
+    if(player.x + 40 > enemy.x &&
+      player.x + 105 < enemy.x + 134 &&
+      player.y < enemy.y &&
+      player.y + 134 > enemy.y ) {
+      return true
+    }
+  }
+
+  let playerLeftCollision = function(enemy) {
+    if(player.y > enemy.y - 85 &&
+      player.y < enemy.y - 47 &&
+      player.x < enemy.x + 55 &&
+      player.x + 5 > enemy.x) {
+      return true
+    }
+  }
+
+
+  function checkCollisions() {
+    allEnemies.forEach(function(enemy) {
+      if(
+        playerTopCollision(enemy) ||
+        playerRightCollision(enemy) ||
+        playerBottomCollision(enemy) ||
+        playerLeftCollision(enemy)
+      ) {
+        player.reset();
+      }
+    })
   }
 
   /* This function initially draws the "game level", it will then call

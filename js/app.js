@@ -46,6 +46,11 @@ let Player = function() {
 Player.prototype.update = function(dt) {
 }
 
+Player.prototype.reset = function() {
+  this.x = 202
+  this.y = 400
+}
+
 Player.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
