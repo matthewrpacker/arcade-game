@@ -33,6 +33,11 @@ Enemy.prototype.shouldResetPosition = () => {
   });
 }
 
+Enemy.prototype.reset = () => {
+  allEnemies.length = 0
+  while (allEnemies.length < 3) { allEnemies.push(new Enemy()); }
+}
+
 Enemy.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };

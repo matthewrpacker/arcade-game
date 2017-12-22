@@ -134,7 +134,6 @@ let Engine = (function(global) {
     }
   }
 
-
   function checkCollisions() {
     allEnemies.forEach(function(enemy) {
       if(
@@ -144,6 +143,7 @@ let Engine = (function(global) {
         playerLeftCollision(enemy)
       ) {
         player.reset();
+        enemy.reset();
       }
     })
   }
