@@ -87,7 +87,33 @@ let Engine = (function(global) {
     })
   }
 
-  function checkForWin() { if(player.y < 0) reset(); }
+  function checkForWin() {
+    if(player.y < 0) {
+      reset();
+      showWin();
+    }
+  }
+
+  function showWin() {
+    canvas.style.visibility = "hidden";
+    let body = document.getElementsByTagName('body')[0]
+    let playButton = document.createElement('div');
+    playButton.innerHTML = '<button id="play">Play Again</button>';
+    let party = document.createElement('h1');
+    party.innerHTML = '🎉';
+    body.insertBefore(playButton, body.firstChild);
+    body.insertBefore(party, body.firstChild);
+    playAgain(playButton, party);
+  }
+
+  function playAgain(playButton, party) {
+    playButton.onclick = function() {
+      reset();
+      party.style.display = 'none';
+      playButton.style.display = 'none';
+      canvas.style.visibility = "visible";
+    }
+  }
 
   function render() {
     let rowImages = [
