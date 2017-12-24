@@ -1,163 +1,195 @@
-let Engine = (function(global) {
-  let doc = global.document
-  let win = global.window
-  let canvas = doc.createElement('canvas')
-  let ctx = canvas.getContext('2d')
+const Engine = ((global) => {
+  const doc = global.document;
+  const win = global.window;
+  const canvas = doc.createElement('canvas');
+  const ctx = canvas.getContext('2d');
   let lastTime;
 
   canvas.width = 505;
   canvas.height = 606;
   doc.body.appendChild(canvas);
 
-  function main() {
-    let now = Date.now()
-    let dt = (now - lastTime) / 1000.0;
+  const main = () => {
+    const now = Date.now();
+    const dt = (now - lastTime) / 1000.0;
     update(dt);
     render();
     lastTime = now;
     win.requestAnimationFrame(main);
-  }
+  };
 
-  function init() {
+  const init = () => {
     reset();
     lastTime = Date.now();
     main();
-  }
+  };
 
-  function update(dt) {
+  const update = (dt) => {
     updateEntities(dt);
     checkCollisions();
     checkForWin();
-  }
+  };
 
-  function updateEntities(dt) {
-    allEnemies.forEach(function(enemy) {
+  const updateEntities = (dt) => {
+    allEnemies.forEach((enemy) => {
       enemy.shouldResetPosition();
       enemy.update(dt);
     });
-    player.update();
-  }
+  };
 
-  let playerTopCollision = function(enemy) {
-    if(player.x + 75 > enemy.x &&
+  const checkCollisions = () => {
+    allEnemies.forEach((enemy) => {
+      if(hasCollided(enemy)) { reset(); }
+    });
+  };
+
+  const hasCollided = (enemy) => {
+    if(
+      playerTopCollision(enemy) ||
+      playerRightCollision(enemy) ||
+      playerBottomCollision(enemy) ||
+      playerLeftCollision(enemy)
+    ) { return true; }
+  };
+
+  const playerTopCollision = (enemy) => {
+    if(
+      player.x + 75 > enemy.x &&
       player.x < enemy.x + 9 &&
       player.y < enemy.y + 12 &&
-      player.y > enemy.y) {
-      return true
-    }
-  }
+      player.y > enemy.y
+    ) { return true; }
+  };
 
-  let playerRightCollision = function(enemy) {
-    if(player.x + 85 > enemy.x &&
+  const playerRightCollision = (enemy) => {
+    if(
+      player.x + 85 > enemy.x &&
       player.x + 73 < enemy.x + 134 &&
       player.y < enemy.y - 25 &&
-      player.y >= enemy.y - 64) {
-      return true
-    }
-  }
+      player.y >= enemy.y - 64
+    ) { return true; }
+  };
 
-  let playerBottomCollision = function(enemy) {
-    if(player.x + 40 > enemy.x &&
+  const playerBottomCollision = (enemy) => {
+    if(
+      player.x + 40 > enemy.x &&
       player.x + 105 < enemy.x + 134 &&
       player.y < enemy.y &&
-      player.y + 134 > enemy.y ) {
-      return true
-    }
-  }
+      player.y + 134 > enemy.y
+    ) { return true; }
+  };
 
-  let playerLeftCollision = function(enemy) {
-    if(player.y > enemy.y - 85 &&
+  const playerLeftCollision = (enemy) => {
+    if(
+      player.y > enemy.y - 85 &&
       player.y < enemy.y - 47 &&
       player.x < enemy.x + 55 &&
-      player.x + 5 > enemy.x) {
-      return true
-    }
-  }
+      player.x + 5 > enemy.x
+    ) { return true; }
+  };
 
-  function checkCollisions() {
-    allEnemies.forEach(function(enemy) {
-      if(
-        playerTopCollision(enemy) ||
-        playerRightCollision(enemy) ||
-        playerBottomCollision(enemy) ||
-        playerLeftCollision(enemy)
-      ) {
-        reset()
-      }
-    })
-  }
-
-  function checkForWin() {
+  const checkForWin = () => {
     if(player.y < 0) {
       reset();
       showWin();
     }
-  }
+  };
 
-  function showWin() {
-    canvas.style.visibility = "hidden";
-    let body = document.getElementsByTagName('body')[0]
-    body.setAttribute("id", "pulse");
-    let playButton = document.createElement('div');
-    playButton.innerHTML = '<button id="play">Play Again</button>';
-    let party = document.createElement('h1');
-    party.innerHTML = '🎉';
-    body.insertBefore(playButton, body.firstChild);
-    body.insertBefore(party, body.firstChild);
+  const showWin = () => {
+    hideCanvas();
+    const body = document.getElementsByTagName('body')[0];
+    const playButton = document.createElement('div');
+    const party = document.createElement('h1');
+    addPulseAnimation(body);
+    addReplayButton(playButton, body);
+    addPartyIcon(party, body);
     playAgain(playButton, party, body);
-  }
+  };
 
-  function playAgain(playButton, party, body) {
-    playButton.onclick = function() {
+  const hideCanvas = () => canvas.style.visibility = "hidden";
+
+  const showCanvas = () => canvas.style.visibility = "visible";
+
+  const addPulseAnimation = (body) => body.setAttribute("id", "pulse");
+
+  const removePulseAnimation = (body) => body.removeAttribute("id");
+
+  const addReplayButton = (playButton, body) => {
+    playButton.innerHTML = '<button id="play">Play Again</button>';
+    body.insertBefore(playButton, body.firstChild);
+  };
+
+  const removeReplayButton = (playButton) => playButton.style.display = 'none';
+
+  const addPartyIcon = (party, body) => {
+    party.innerHTML = '🎉';
+    body.insertBefore(party, body.firstChild);
+  };
+
+  const removeParyIcon = (party) => party.style.display = 'none';
+
+  const playAgain = (playButton, party, body) => {
+    playButton.onclick = () => {
       reset();
-      body.removeAttribute("id"); // remove pulse background colors
-      party.style.display = 'none'; // remove emoji
-      playButton.style.display = 'none'; // remove button
-      canvas.style.visibility = "visible"; // show canvas
-    }
-  }
+      removeReplayButton(playButton);
+      removeParyIcon(party);
+      removePulseAnimation(body);
+      showCanvas();
+    };
+  };
 
-  function render() {
-    let rowImages = [
-      'images/water-block.png',   // Top row is water
-      'images/stone-block.png',   // Row 1 of 3 of stone
-      'images/stone-block.png',   // Row 2 of 3 of stone
-      'images/stone-block.png',   // Row 3 of 3 of stone
-      'images/grass-block.png',   // Row 1 of 2 of grass
-      'images/grass-block.png'    // Row 2 of 2 of grass
-    ],
-    numRows = 6,
-    numCols = 5,
-    row, col;
+  const getImage = (image) => {
+    if(characterOrEnemyImage(image)) { return `images/${image}.png`; }
+    return `images/${image}-block.png`;
+  };
 
-    ctx.clearRect(0,0,canvas.width,canvas.height)
+  const characterOrEnemyImage = (image) => {
+    if(image[0] == 't' || image[0] == 'c') { return true; } // check for turtle or char-boy
+  };
 
-    for (row = 0; row < numRows; row++) {
-      for (col = 0; col < numCols; col++) {
+  const render = () => {
+    const rowImages = [
+      getImage('water'), // Top row is water
+      getImage('stone'), // Row 1 of 3 of stone
+      getImage('stone'), // Row 2 of 3 of stone
+      getImage('stone'), // Row 3 of 3 of stone
+      getImage('grass'), // Row 1 of 2 of grass
+      getImage('grass')  // Row 2 of 2 of grass
+    ];
+    const numRows = 6;
+    const numCols = 5;
+
+    clearCanvas();
+    drawCanvas(rowImages, numRows, numCols);
+    renderEntities();
+  };
+
+  const clearCanvas = () => ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  const drawCanvas = (rowImages, numRows, numCols) => {
+    for (let row = 0; row < numRows; row++) {
+      for (let col = 0; col < numCols; col++) {
         ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
       }
     }
-    renderEntities();
-  }
+  };
 
-  function renderEntities() {
-    allEnemies.forEach(function(enemy) {
-      enemy.render();
-    });
+  const renderEntities = () => {
+    allEnemies.forEach((enemy) => { enemy.render(); });
     player.render();
-  }
+  };
 
-  function reset() {
+  const reset = () => {
     player.reset();
-    allEnemies.forEach((enemy) => { enemy.reset(); })
-  }
+    allEnemies.forEach((enemy) => { enemy.reset(); });
+  };
 
   Resources.load([
-    'images/stone-block.png',
-    'images/water-block.png',
-    'images/grass-block.png',
-    'images/turtle-12.png',
-    'images/char-boy.png'
+    getImage('stone'),
+    getImage('water'),
+    getImage('grass'),
+    getImage('turtle'),
+    getImage('char-boy')
   ]);
   Resources.onReady(init);
   global.ctx = ctx;
