@@ -4,4 +4,29 @@ body {
 
 h1 {
   font-size: 200px;
+  margin-bottom: 30px;
+}
+
+button {
+  border-radius: 20px;
+  background-color: #4286f4;
+  color: white;
+  padding: 10px 20px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+#pulse {
+  animation-name: pulse;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes pulse {
+  0%   {background-color: #fadd6e;} /* yellow */
+  20%  {background-color: #81a9f8;} /* blue */
+  40%  {background-color: #f0b9fb;} /* purple */
+  60%  {background-color: #ed7fa5;} /* red */
+  80%  {background-color: #81a9f8;} /* blue */
+  100% {background-color: #fadd6e;} /* yellow */
 }

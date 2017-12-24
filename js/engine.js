@@ -97,21 +97,23 @@ let Engine = (function(global) {
   function showWin() {
     canvas.style.visibility = "hidden";
     let body = document.getElementsByTagName('body')[0]
+    body.setAttribute("id", "pulse");
     let playButton = document.createElement('div');
     playButton.innerHTML = '<button id="play">Play Again</button>';
     let party = document.createElement('h1');
     party.innerHTML = '🎉';
     body.insertBefore(playButton, body.firstChild);
     body.insertBefore(party, body.firstChild);
-    playAgain(playButton, party);
+    playAgain(playButton, party, body);
   }
 
-  function playAgain(playButton, party) {
+  function playAgain(playButton, party, body) {
     playButton.onclick = function() {
       reset();
-      party.style.display = 'none';
-      playButton.style.display = 'none';
-      canvas.style.visibility = "visible";
+      body.removeAttribute("id"); // remove pulse background colors
+      party.style.display = 'none'; // remove emoji
+      playButton.style.display = 'none'; // remove button
+      canvas.style.visibility = "visible"; // show canvas
     }
   }
 
