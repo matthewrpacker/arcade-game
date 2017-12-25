@@ -1,3 +1,5 @@
+'use strict';
+
 const Engine = ((global) => {
   const doc = global.document;
   const win = global.window;
@@ -27,7 +29,7 @@ const Engine = ((global) => {
   const update = (dt) => {
     updateEntities(dt);
     checkCollisions();
-    checkForWin();
+    player.checkForWin();
   };
 
   const updateEntities = (dt) => {
@@ -39,63 +41,63 @@ const Engine = ((global) => {
 
   const checkCollisions = () => {
     allEnemies.forEach((enemy) => {
-      if(hasCollided(enemy)) { reset(); }
+      if(enemy.hasCollided()) { reset(); }
     });
   };
 
-  const hasCollided = (enemy) => {
+  Enemy.prototype.hasCollided = function() {
     if(
-      playerTopCollision(enemy) ||
-      playerRightCollision(enemy) ||
-      playerBottomCollision(enemy) ||
-      playerLeftCollision(enemy)
+      this.playerTopCollision() ||
+      this.playerRightCollision() ||
+      this.playerBottomCollision() ||
+      this.playerLeftCollision()
     ) { return true; }
   };
 
-  const playerTopCollision = (enemy) => {
+  Enemy.prototype.playerTopCollision = function() {
     if(
-      player.x + 75 > enemy.x &&
-      player.x < enemy.x + 9 &&
-      player.y < enemy.y + 12 &&
-      player.y > enemy.y
+      player.x + 75 > this.x &&
+      player.x < this.x + 9 &&
+      player.y < this.y + 12 &&
+      player.y > this.y
     ) { return true; }
   };
 
-  const playerRightCollision = (enemy) => {
+  Enemy.prototype.playerRightCollision = function() {
     if(
-      player.x + 85 > enemy.x &&
-      player.x + 73 < enemy.x + 134 &&
-      player.y < enemy.y - 25 &&
-      player.y >= enemy.y - 64
+      player.x + 85 > this.x &&
+      player.x + 73 < this.x + 134 &&
+      player.y < this.y - 25 &&
+      player.y >= this.y - 64
     ) { return true; }
   };
 
-  const playerBottomCollision = (enemy) => {
+  Enemy.prototype.playerBottomCollision = function() {
     if(
-      player.x + 40 > enemy.x &&
-      player.x + 105 < enemy.x + 134 &&
-      player.y < enemy.y &&
-      player.y + 134 > enemy.y
+      player.x + 40 > this.x &&
+      player.x + 105 < this.x + 134 &&
+      player.y < this.y &&
+      player.y + 134 > this.y
     ) { return true; }
   };
 
-  const playerLeftCollision = (enemy) => {
+  Enemy.prototype.playerLeftCollision = function() {
     if(
-      player.y > enemy.y - 85 &&
-      player.y < enemy.y - 47 &&
-      player.x < enemy.x + 55 &&
-      player.x + 5 > enemy.x
+      player.y > this.y - 85 &&
+      player.y < this.y - 47 &&
+      player.x < this.x + 55 &&
+      player.x + 5 > this.x
     ) { return true; }
   };
 
-  const checkForWin = () => {
-    if(player.y < 0) {
+  Player.prototype.checkForWin = function() {
+    if(this.y < 0) {
       reset();
-      showWin();
+      this.showWin();
     }
   };
 
-  const showWin = () => {
+  Player.prototype.showWin = function() {
     hideCanvas();
     const body = document.getElementsByTagName('body')[0];
     const playButton = document.createElement('div');
