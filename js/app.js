@@ -11,8 +11,8 @@ const Enemy = function() {
 
 const makeRandomX = () => Math.random() * (-125 + 500) - 500;
 
-const [row1, row2, row3] = [133, 216, 300];
-const makeRandomY = () => [row1, row2, row3][randomIndex()];
+const [ROW_1, ROW_2, ROW_3] = [133, 216, 300];
+const makeRandomY = () => [ROW_1, ROW_2, ROW_3][randomIndex()];
 
 const randomIndex = () => Math.trunc(3 * Math.random());
 
@@ -62,19 +62,19 @@ const [leftMax, upMax, rightMax, downMax] = [-15.5, -12.5, 419.5, 445];
 Player.prototype.handleInput = function(key) {
   switch (key) {
     case 'left':
-      if(player.x === leftMax) { break; }
+      if(this.x === leftMax) { break; }
       this.x = this.x - 7.5;
       break;
     case 'up':
-      if(player.y === upMax) { break; }
+      if(this.y === upMax) { break; }
       this.y = this.y - 7.5;
       break;
     case 'right':
-      if(player.x === rightMax) { break; }
+      if(this.x === rightMax) { break; }
       this.x = this.x + 7.5;
       break;
     case 'down':
-      if(player.y === downMax) { break; }
+      if(this.y === downMax) { break; }
       this.y = this.y + 7.5;
       break;
   }
